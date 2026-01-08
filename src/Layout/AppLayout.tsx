@@ -1,3 +1,4 @@
+import { DesktopFloatingActions } from '@app/components/DesktopFloatingActions';
 import Header from '@app/components/Header';
 import { Box } from '@mui/material';
 import type { ReactNode } from 'react';
@@ -10,7 +11,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
         bgcolor: 'background.default',
@@ -18,6 +19,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     >
       {/* Top Navigation */}
       <Header />
+      <DesktopFloatingActions />
 
       {/* Main Content */}
       <Box

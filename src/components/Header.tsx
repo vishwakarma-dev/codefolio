@@ -211,7 +211,7 @@ const Header: React.FC = () => {
             </Box>
 
             {/* Desktop Nav */}
-            <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 1, justifyContent:"space-between" }}>
               {navLinks.map((link) => {
                 const isActive = pathname === link.path;
 
@@ -254,46 +254,6 @@ const Header: React.FC = () => {
                   gap: 1
                 }}
               >
-                <Tooltip title="GitHub">
-                  <IconButton
-                    size="small"
-                    component="a"
-                    href={data?.SOCIAL_LINKS.github}
-                    target="_blank"
-                  >
-                    <GitHub fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="LinkedIn">
-                  <IconButton
-                    size="small"
-                    component="a"
-                    href={data?.SOCIAL_LINKS.linkedin}
-                    target="_blank"
-                  >
-                    <LinkedIn fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Toggle Theme">
-                  <IconButton onClick={colorMode.toggleColorMode}>
-                    {theme.palette.mode === 'dark' ? <LightMode /> : <DarkMode />}
-                  </IconButton>
-                </Tooltip>
-
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<Download />}
-                  component="a"
-                  href={data?.SOCIAL_LINKS.resume}
-                  target="_blank"
-                  sx={{ px: 2, fontWeight: 800 }}
-                >
-                  CV
-                </Button>
-
                 <Button
                   size="small"
                   component={Link}
@@ -303,6 +263,11 @@ const Header: React.FC = () => {
                 >
                   Contact
                 </Button>
+                <Tooltip title="Toggle Theme">
+                    <IconButton size='small' onClick={colorMode.toggleColorMode}>
+                      {theme.palette.mode === 'dark' ? <LightMode /> : <DarkMode />}
+                    </IconButton>
+                </Tooltip>
               </Box>
             </Box>
 

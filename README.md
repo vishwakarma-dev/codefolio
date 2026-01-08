@@ -1,40 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Codefolio
 
-## Getting Started
+**Codefolio** is a modern, high-performance developer portfolio built with **Next.js (Pages Router)** and **TypeScript**, designed for static deployment on **GitHub Pages**.  
+It showcases projects, skills, and professional details with a clean UI, fast load times, and zero backend dependencies.
 
-First, run the development server:
+🌐 Live Site: https://vaibhav-satokar.github.io
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Features
+
+- ⚡ Fully static site (GitHub Pages compatible)
+- 🧭 Pages Router architecture
+- 🎨 Modern, responsive UI
+- 🧠 Typed data models for projects and skills
+- 🚀 Automatic deployment via GitHub Actions
+- 📈 Optimized for performance and SEO
+
+---
+
+## 🛠 Tech Stack
+
+- **Framework:** Next.js 16 (Pages Router)
+- **Language:** TypeScript
+- **UI:** React, Material UI
+- **Styling:** CSS Modules / MUI Theme
+- **Deployment:** GitHub Pages
+- **CI/CD:** GitHub Actions
+
+---
+
+## 📂 Project Structure
+
+```
+.
+├── pages/              # Pages Router
+│   ├── index.tsx
+│   ├── _app.tsx
+│   └── _document.tsx
+├── components/         # Reusable UI components
+├── data/               # Static portfolio data
+├── types/              # TypeScript interfaces
+├── public/             # Static assets
+├── .github/workflows/  # GitHub Actions (auto deploy)
+├── next.config.js
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 🚀 Getting Started
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### Prerequisites
+- Node.js 18+
+- npm
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+### Install dependencies
+```bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Run locally
+```bash
+npm run dev
+```
 
-## Learn More
+Open http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+## 🏗 Build (Static Export)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build
+```
 
-## Deploy on Vercel
+This generates a fully static site in the `/out` directory.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## 📦 Deployment
+
+Codefolio is deployed automatically using **GitHub Actions**.
+
+Every push to the `main` branch:
+1. Builds the Next.js project
+2. Exports static files
+3. Deploys to GitHub Pages
+
+No manual steps required.
+
+---
+
+## 🧠 Design Philosophy
+
+- No backend, no APIs — fast and reliable
+- Static-first architecture
+- Clear separation of data, UI, and logic
+- Easy to extend with new sections or projects
+
+---
+
+## 📌 Customization
+
+Update portfolio content here:
+```
+/data/portfolio.ts
+```
+
+Add new projects, skills, or social links without touching UI code.
+
+---
+
+## 📄 License
+
+This project is open source and available under the **MIT License**.
+
+---
+
+## 👤 Author
+
+**Vaibhav Satokar**  
+- GitHub: https://github.com/vaibhav-satokar  
+- LinkedIn: https://www.linkedin.com/in/vaibhav-satokar/
+
+---
+
+If you find this useful, feel free to ⭐ the repository.
