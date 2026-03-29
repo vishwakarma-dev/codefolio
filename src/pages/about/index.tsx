@@ -1,143 +1,248 @@
-import { Box, Container, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
-import { Computer } from "@mui/icons-material";
-import { TimelineItem } from "@app/components/TimeLineItem";  
+import { TimelineItem } from "@app/components/TimeLineItem";
+import { PageHero } from "@app/components/ui/PageHero";
+import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
+import { AutoAwesome, Computer, Hub, Shield, Speed } from "@mui/icons-material";
+import { Box, Container, Grid, Paper, Stack, Typography } from "@mui/material";
 import Head from "next/head";
+import { useContext } from "react";
+
+const guidingPrinciples = [
+  {
+    key: "performance",
+    title: "Performance",
+    description:
+      "Optimize interaction speed and reduce load cost in every release.",
+    icon: Speed,
+  },
+  {
+    key: "scalability",
+    title: "Scalability",
+    description: "Build modular systems that evolve cleanly as features grow.",
+    icon: Hub,
+  },
+  {
+    key: "security",
+    title: "Security",
+    description:
+      "Apply secure defaults across auth, data handling, and access control.",
+    icon: Shield,
+  },
+  {
+    key: "craft",
+    title: "Code Craft",
+    description:
+      "Keep architecture readable and maintainable for long-term velocity.",
+    icon: AutoAwesome,
+  },
+];
 
 function AboutPage() {
-
-  const guidingPrinciples = [
-    { title: "Performance", icon: "⚡", desc: "Optimizing every byte for lightning fast interactions." },
-    { title: "Scalability", icon: "🏗️", desc: "Architecting systems that grow with your business." },
-    { title: "Security", icon: "🛡️", desc: "Implementing industry-standard IAM protocols." },
-    { title: "Clean Code", icon: "✨", desc: "Writing readable, maintainable, and robust logic." }
-  ];
+  const data = useContext(PortfolioDataContext);
+  const fullName = data?.USER.fullName ?? "Portfolio User";
 
   return (
     <>
       <Head>
-        <title>
-          Vaibhav Satokar : About mes
-        </title>
+        <title>{`${fullName} : About Me`}</title>
       </Head>
-      <Box sx={{ overflowX: 'hidden' }}>
-        <Container maxWidth="lg" sx={{ pt: 15, pb: 10 }}>
-          <Grid container spacing={8} alignItems="center" sx={{ mb: 15 }}>
-            <Grid size={{ xs: 12, lg: 6 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-                <Computer color="primary" fontSize="small" />
-                <Typography variant="overline" sx={{ fontWeight: 900, color: 'primary.main', letterSpacing: 2 }}>The Profile</Typography>
-              </Stack>
-              <Typography variant="h2" sx={{ fontWeight: 900, fontFamily: 'Space Grotesk', mb: 4, lineHeight: 1.1 }}>
-                Solving problems through <Box component="span" sx={{ color: 'primary.main' }}>modular</Box> architecture.
-              </Typography>
-              <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '1.1rem', mb: 3, lineHeight: 1.7 }}>
-                I am a dedicated Application Engineer with a focus on building high-performance, scalable web solutions. My journey is anchored in the .NET ecosystem, complemented by modern frontend practices using React.
-              </Typography>
-              <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '1.1rem', mb: 4, lineHeight: 1.7 }}>
-                I thrive on turning complex manual processes into streamlined digital experiences that bridge business logic and intuitive UI.
-              </Typography>
-              <Divider sx={{ mb: 4 }} />
-              <Stack direction="row" spacing={6}>
-                <Box>
-                  <Typography variant="h3" sx={{ fontWeight: 900, color: 'primary.main' }}>2+</Typography>
-                  <Typography variant="caption" sx={{ fontWeight: 800, color: 'text.disabled', textTransform: 'uppercase', letterSpacing: 1.5 }}>Years Experience</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="h3" sx={{ fontWeight: 900, color: 'primary.main' }}>15+</Typography>
-                  <Typography variant="caption" sx={{ fontWeight: 800, color: 'text.disabled', textTransform: 'uppercase', letterSpacing: 1.5 }}>Systems Shipped</Typography>
-                </Box>
-              </Stack>
-            </Grid>
-            <Grid size={{ xs: 12, lg: 6 }}>
-              <Box sx={{ position: 'relative' }}>
-                <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'primary.main', opacity: 0.05, filter: 'blur(50px)' }} />
-                <Paper elevation={0} sx={(theme)=>({ border: `1px solid ${theme.palette.divider}`, overflow: 'hidden' })}>
-                  <Box 
-                    component="img" 
-                    src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1000&auto=format&fit=crop" 
-                    sx={{ width: '100%', height: 'auto', display: 'block' }}
-                  />
-                </Paper>
-              </Box>
-            </Grid>
+
+      <Container
+        maxWidth="lg"
+        sx={{ pt: { xs: 7, md: 8 }, pb: { xs: 10, md: 12 } }}
+      >
+        <Grid
+          container
+          spacing={{ xs: 5, lg: 8 }}
+          alignItems="center"
+          sx={{ mb: 14 }}
+        >
+          <Grid size={{ xs: 12, lg: 7 }}>
+            <PageHero
+              label="Profile"
+              icon={<Computer color="primary" fontSize="small" />}
+              title="Solving Problems With"
+              highlight="Modular Architecture"
+              description="I build robust full-stack systems with .NET and React, focused on clear boundaries, maintainable code, and measurable business outcomes."
+              sx={{ mb: 4 }}
+            />
+
+            <Typography
+              variant="body1"
+              sx={{
+                color: "text.secondary",
+                fontSize: "1.05rem",
+                mb: 4,
+                lineHeight: 1.8,
+              }}
+            >
+              My engineering approach connects reliable backend architecture
+              with intuitive interfaces. I enjoy turning complex workflows into
+              streamlined digital experiences.
+            </Typography>
+
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{ flexWrap: "wrap" }}
+              useFlexGap
+            >
+              <Paper sx={{ px: 3, py: 2 }}>
+                <Typography
+                  variant="h4"
+                  sx={{ fontWeight: 900, color: "primary.main" }}
+                >
+                  2+
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{ color: "text.secondary", fontWeight: 700 }}
+                >
+                  Years Experience
+                </Typography>
+              </Paper>
+              <Paper sx={{ px: 3, py: 2 }}>
+                <Typography
+                  variant="h4"
+                  sx={{ fontWeight: 900, color: "primary.main" }}
+                >
+                  15+
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{ color: "text.secondary", fontWeight: 700 }}
+                >
+                  Systems Delivered
+                </Typography>
+              </Paper>
+            </Stack>
           </Grid>
 
-          <Box sx={{ mb: 15, textAlign: 'center' }}>
-            <Typography variant="h2" sx={{ fontWeight: 900, fontFamily: 'Space Grotesk', mb: 10 }}>
-              Professional Journey
-            </Typography>
-            <Box sx={{ position: 'relative', pt: 4 }}>
-              <TimelineItem 
-                isFirst
-                date="Jan 2023 - Present"
-                title="Application Engineer"
-                subtitle="Kh Infinite Possibilities Private Limited"
-                description="Leading development of enterprise-grade solutions using .NET, React, and MSSQL. Responsible for end-to-end implementation of complex workflow management portals."
-                isRight
+          <Grid size={{ xs: 12, lg: 5 }}>
+            <Box sx={{ position: "relative" }}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: "-10% -6%",
+                  borderRadius: 4,
+                  background:
+                    "radial-gradient(circle, rgba(99,102,241,0.18), transparent 65%)",
+                  zIndex: 0,
+                }}
               />
-              <TimelineItem 
-                date="Aug 2022 - Jan 2023"
-                title="Graduate Trainee"
-                subtitle="Kh Infinite Possibilities Private Limited"
-                description="Gained intensive hands-on experience in full-stack engineering, collaborating with senior architects on scalable user management systems."
-                isRight={false}
-              />
-              <TimelineItem
-                date="Aug 2021 - Feb 2022"
-                title="SDET Certification Program"
-                subtitle="Seed Infotech, Pune"
-                description="Completed structured SDET training covering Manual Testing, Core Java, Selenium WebDriver, TestNG, API Testing, SQL, and Automation Framework design."
-                isRight
-              />
-              <TimelineItem
-                date="Graduated"
-                title="B.E. Mechanical"
-                subtitle="Amravati University"
-                description="Developed strong analytical and structural thinking skills through mechanical design and thermodynamics research, now applied to software systems."
-              />
+              <Paper
+                sx={{ overflow: "hidden", position: "relative", zIndex: 1 }}
+              >
+                <Box
+                  component="img"
+                  src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1000&auto=format&fit=crop"
+                  alt="Workspace setup"
+                  sx={{ width: "100%", height: "auto", display: "block" }}
+                />
+              </Paper>
             </Box>
-          </Box>
+          </Grid>
+        </Grid>
 
-          <Box sx={{ mb: 10 }}>
-            <Typography variant="h2" sx={{ textAlign: 'center', fontWeight: 900, fontFamily: 'Space Grotesk', mb: 8 }}>
-              Guiding Principles
-            </Typography>
-            <Grid container spacing={3} justifyContent="center">
-              {guidingPrinciples.map((val, idx) => (
-                <Grid size={{ xs: 12, sm: 6, md: 3 }} key={idx}>
-                  <Paper 
-                    elevation={0}
-                    sx={(theme) => ({ 
-                      p: 4, 
-                      height: '100%', 
-                      borderRadius: '40px',
-                      border: `1px solid ${theme.palette.divider}`,
-                      bgcolor: 'background.paper',
-                      textAlign: 'center',
-                      transition: 'all 0.3s ease',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      '&:hover': {
-                        transform: 'translateY(-10px)',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.05)',
-                        borderColor: 'primary.main'
-                      }
-                    })}
+        <Box sx={{ mb: 14 }}>
+          <PageHero
+            align="center"
+            label="Career Path"
+            title="Professional"
+            highlight="Journey"
+            description="A quick timeline of the roles and milestones that shaped my engineering perspective."
+            sx={{ mb: 8 }}
+          />
+          <Box sx={{ pt: 3 }}>
+            <TimelineItem
+              isFirst
+              date="January 2023 - Present"
+              title="Application Engineer"
+              subtitle="Kh Infinite Possibilities Private Limited"
+              description="Leading development of enterprise workflows across .NET, React, and SQL systems with end-to-end ownership."
+              isRight
+            />
+            <TimelineItem
+              date="August 2022 - January 2023"
+              title="Graduate Trainee"
+              subtitle="Kh Infinite Possibilities Private Limited"
+              description="Worked closely with senior engineers on user management and process automation modules."
+              isRight={false}
+            />
+            <TimelineItem
+              date="August 2021 - February 2022"
+              title="SDET Certification Program"
+              subtitle="Seed Infotech, Pune"
+              description="Completed training in manual testing, Java, Selenium, API testing, SQL, and test automation fundamentals."
+              isRight
+            />
+            <TimelineItem
+              date="Graduation"
+              title="B.E. Mechanical Engineering"
+              subtitle="Amravati University"
+              description="Built strong analytical and systems-thinking foundations now applied to software architecture."
+            />
+          </Box>
+        </Box>
+
+        <Box>
+          <PageHero
+            align="center"
+            label="Engineering Mindset"
+            title="Guiding"
+            highlight="Principles"
+            description="Core quality standards I apply across product architecture and delivery."
+            sx={{ mb: 7 }}
+          />
+
+          <Grid container spacing={3}>
+            {guidingPrinciples.map((principle) => {
+              const PrincipleIcon = principle.icon;
+              return (
+                <Grid key={principle.key} size={{ xs: 12, sm: 6, md: 3 }}>
+                  <Paper
+                    sx={{
+                      p: 3.5,
+                      height: "100%",
+                      textAlign: "center",
+                      transition: "all 0.25s ease",
+                      "&:hover": {
+                        transform: "translateY(-6px)",
+                        borderColor: "primary.main",
+                      },
+                    }}
                   >
-                    <Typography variant="h2" sx={{ mb: 2, fontSize: '3rem' }}>{val.icon}</Typography>
-                    <Typography variant="h5" sx={{ fontWeight: 900, mb: 1.5, fontFamily: 'Space Grotesk' }}>{val.title}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.6, px: 2 }}>{val.desc}</Typography>
+                    <Box
+                      sx={{
+                        width: 56,
+                        height: 56,
+                        mx: "auto",
+                        mb: 2,
+                        borderRadius: 999,
+                        display: "grid",
+                        placeItems: "center",
+                        bgcolor: "action.hover",
+                      }}
+                    >
+                      <PrincipleIcon color="primary" />
+                    </Box>
+                    <Typography variant="h6" sx={{ mb: 1.2, fontWeight: 900 }}>
+                      {principle.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary", lineHeight: 1.7 }}
+                    >
+                      {principle.description}
+                    </Typography>
                   </Paper>
                 </Grid>
-              ))}
-            </Grid>
-          </Box>
-        </Container>
-      </Box>
+              );
+            })}
+          </Grid>
+        </Box>
+      </Container>
     </>
-  )
+  );
 }
 
 export default AboutPage;
-

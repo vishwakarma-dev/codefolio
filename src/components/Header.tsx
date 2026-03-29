@@ -1,36 +1,38 @@
-import React, { useContext, useState } from 'react';
+import { NAV_LINKS } from "@app/config/navigation";
+import { ColorModeContext } from "@app/providers/ColorModeProvider";
+import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
+import {
+  Close,
+  DarkMode,
+  Download,
+  Email,
+  GitHub,
+  LightMode,
+  LinkedIn,
+  Menu,
+} from "@mui/icons-material";
 import {
   AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-  Tooltip,
   Box,
+  Button,
   Container,
-  useTheme,
+  Divider,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
   Stack,
-  Divider
-} from '@mui/material';
-import {
-  LightMode,
-  DarkMode,
-  Menu,
-  Close,
-  GitHub,
-  LinkedIn,
-  Download,
-  Email
-} from '@mui/icons-material';
-import { usePathname } from 'next/navigation';
-import { ColorModeContext } from '@app/providers/ColorModeProvider';
-import { PortfolioDataContext } from '@app/providers/PortfolioDataProvider';
-import Link from 'next/link';
+  Toolbar,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type React from "react";
+import { useContext, useState } from "react";
 
 const Header: React.FC = () => {
   const theme = useTheme();
@@ -38,22 +40,44 @@ const Header: React.FC = () => {
   const colorMode = useContext(ColorModeContext);
   const data = useContext(PortfolioDataContext);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const navLinks = [
-    { label: 'Home', path: '/' },
-    { label: 'About', path: '/about' },
-    { label: 'Projects', path: '/projects' },
-    { label: 'Skills', path: '/skills' }
-  ];
+  const resumeHref = data?.SOCIAL_LINKS.resume;
+  const resumeFileName = resumeHref
+    ? decodeURIComponent(resumeHref.split("/").pop() || "resume.pdf")
+    : "resume.pdf";
+  const user = data?.USER ?? {
+    initials: "U",
+    fullName: "Portfolio User",
+    firstName: "Portfolio",
+    lastName: "User",
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen((prev) => !prev);
   };
 
   const drawer = (
-    <Box sx={{ width: 280, height: '100%', display: 'flex', flexDirection: 'column', p: 3 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ fontWeight: 900, fontFamily: 'Space Grotesk' }}>
+    <Box
+      sx={{
+        width: "100%",
+        boxSizing: "border-box",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflowX: "hidden",
+        px: 1.5,
+        py: 1.5,
+      }}
+    >
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: 4 }}
+      >
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 900, fontFamily: "Space Grotesk" }}
+        >
           MENU
         </Typography>
         <IconButton onClick={handleDrawerToggle}>
@@ -62,7 +86,7 @@ const Header: React.FC = () => {
       </Stack>
       <Divider />
       <List sx={{ flexGrow: 1 }}>
-        {navLinks.map((link) => {
+        {NAV_LINKS.map((link) => {
           const isActive = pathname === link.path;
 
           return (
@@ -73,18 +97,18 @@ const Header: React.FC = () => {
                 onClick={handleDrawerToggle}
                 sx={{
                   borderRadius: 2,
-                  bgcolor: isActive ? 'primary.main' : 'transparent',
-                  color: isActive ? 'primary.contrastText' : 'text.primary',
-                  '&:hover': {
-                    bgcolor: isActive ? 'primary.main' : 'action.hover'
-                  }
+                  bgcolor: isActive ? "primary.main" : "transparent",
+                  color: isActive ? "primary.contrastText" : "text.primary",
+                  "&:hover": {
+                    bgcolor: isActive ? "primary.main" : "action.hover",
+                  },
                 }}
               >
                 <ListItemText
                   primary={link.label}
                   primaryTypographyProps={{
                     fontWeight: 800,
-                    fontSize: '1.1rem'
+                    fontSize: "1.1rem",
                   }}
                 />
               </ListItemButton>
@@ -95,7 +119,7 @@ const Header: React.FC = () => {
         <Divider sx={{ my: 2 }} />
 
         {(() => {
-          const isActive = pathname === '/contact';
+          const isActive = pathname === "/contact";
 
           return (
             <ListItem disablePadding>
@@ -105,8 +129,8 @@ const Header: React.FC = () => {
                 onClick={handleDrawerToggle}
                 sx={{
                   borderRadius: 2,
-                  bgcolor: isActive ? 'primary.main' : 'transparent',
-                  color: isActive ? 'primary.contrastText' : 'text.primary'
+                  bgcolor: isActive ? "primary.main" : "transparent",
+                  color: isActive ? "primary.contrastText" : "text.primary",
                 }}
               >
                 <ListItemText
@@ -119,24 +143,32 @@ const Header: React.FC = () => {
         })()}
       </List>
 
-      <Stack spacing={2} sx={{ mt: 'auto' }}>
+      <Stack spacing={2} sx={{ mt: "auto" }}>
         <Button
           variant="contained"
           fullWidth
           startIcon={<Download />}
           component="a"
-          href={data?.SOCIAL_LINKS.resume}
-          target="_blank"
+          href={resumeHref}
+          download={resumeFileName}
           sx={{ fontWeight: 800, py: 1.5 }}
         >
           Download CV
         </Button>
 
         <Stack direction="row" spacing={2} justifyContent="center">
-          <IconButton component="a" href={data?.SOCIAL_LINKS.github} target="_blank">
+          <IconButton
+            component="a"
+            href={data?.SOCIAL_LINKS.github}
+            target="_blank"
+          >
             <GitHub />
           </IconButton>
-          <IconButton component="a" href={data?.SOCIAL_LINKS.linkedin} target="_blank">
+          <IconButton
+            component="a"
+            href={data?.SOCIAL_LINKS.linkedin}
+            target="_blank"
+          >
             <LinkedIn />
           </IconButton>
           <IconButton component="a" href={`mailto:${data?.SOCIAL_LINKS.email}`}>
@@ -153,66 +185,115 @@ const Header: React.FC = () => {
         position="fixed"
         elevation={0}
         sx={(theme) => ({
+          borderRadius: 0,
+          overflowX: "clip",
           bgcolor:
-            theme.palette.mode === 'dark'
-              ? 'rgba(10,10,10,0.6)'
-              : 'rgba(255,255,255,0.65)',
-          backdropFilter: 'blur(18px)',
-          WebkitBackdropFilter: 'blur(18px)',
+            theme.palette.mode === "dark"
+              ? "rgba(10,10,10,0.6)"
+              : "rgba(255,255,255,0.65)",
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
           borderBottom: `1px solid ${
-            theme.palette.mode === 'dark'
-              ? 'rgba(255,255,255,0.08)'
-              : 'rgba(0,0,0,0.08)'
+            theme.palette.mode === "dark"
+              ? "rgba(255,255,255,0.08)"
+              : "rgba(0,0,0,0.08)"
           }`,
-          color: 'text.primary',
-          zIndex: theme.zIndex.appBar
+          color: "text.primary",
+          zIndex: theme.zIndex.appBar,
         })}
       >
         <Container maxWidth="lg">
-          <Toolbar disableGutters sx={{ height: 60, justifyContent: 'space-between' }}>
+          <Toolbar
+            disableGutters
+            sx={{
+              height: 56,
+              justifyContent: "space-between",
+            }}
+          >
+            {/* Mobile Menu Left */}
+            <Box
+              sx={{
+                display: { xs: "flex", lg: "none" },
+                alignItems: "center",
+                mr: 0.5,
+              }}
+            >
+              <IconButton onClick={handleDrawerToggle} aria-label="Open menu">
+                <Menu />
+              </IconButton>
+            </Box>
+
             {/* Logo */}
             <Box
               component={Link}
               href="/"
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1.5,
-                textDecoration: 'none',
-                color: 'inherit'
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                textDecoration: "none",
+                color: "inherit",
+                minWidth: 0,
+                flexGrow: { xs: 1, lg: 0 },
               }}
             >
               <Box
                 sx={{
                   width: 32,
                   height: 32,
-                  background: 'linear-gradient(135deg, #6366f1, #a855f7)',
-                  borderRadius: '80px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
+                  background: "linear-gradient(135deg, #6366f1, #a855f7)",
+                  borderRadius: "80px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "white",
                   fontWeight: 900,
-                  boxShadow: '0 4px 10px rgba(99, 102, 241, 0.3)'
+                  boxShadow: "0 4px 10px rgba(99, 102, 241, 0.3)",
                 }}
               >
-                VS
+                {user.initials}
               </Box>
               <Typography
                 variant="h6"
                 sx={{
                   fontWeight: 900,
                   letterSpacing: -0.5,
-                  fontFamily: 'Space Grotesk'
+                  fontFamily: "Space Grotesk",
+                  fontSize: { xs: "1.1rem", sm: "1.35rem" },
+                  display: { xs: "none", sm: "block" },
+                  whiteSpace: "nowrap",
                 }}
               >
-                VAIBHAV SATOKAR
+                {user.fullName}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 900,
+                  letterSpacing: -0.3,
+                  fontFamily: "Space Grotesk",
+                  fontSize: "1.1rem",
+                  display: { xs: "block", sm: "none" },
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "100%",
+                }}
+              >
+                {user.firstName}
               </Typography>
             </Box>
 
             {/* Desktop Nav */}
-            <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 1, justifyContent:"space-between" }}>
-              {navLinks.map((link) => {
+            <Box
+              sx={{
+                display: { xs: "none", lg: "flex" },
+                alignItems: "center",
+                gap: 1,
+                justifyContent: "space-between",
+              }}
+            >
+              {NAV_LINKS.map((link) => {
                 const isActive = pathname === link.path;
 
                 return (
@@ -223,20 +304,20 @@ const Header: React.FC = () => {
                     sx={{
                       px: 2,
                       fontWeight: 700,
-                      color: isActive ? 'primary.main' : 'text.secondary',
-                      position: 'relative',
-                      '&::after': isActive
+                      color: isActive ? "primary.main" : "text.secondary",
+                      position: "relative",
+                      "&::after": isActive
                         ? {
                             content: '""',
-                            position: 'absolute',
+                            position: "absolute",
                             bottom: 4,
-                            left: '20%',
-                            right: '20%',
+                            left: "20%",
+                            right: "20%",
                             height: 2,
-                            bgcolor: 'primary.main',
-                            borderRadius: 1
+                            bgcolor: "primary.main",
+                            borderRadius: 1,
                           }
-                        : {}
+                        : {},
                     }}
                   >
                     {link.label}
@@ -249,35 +330,42 @@ const Header: React.FC = () => {
                   ml: 2,
                   pl: 2,
                   borderLeft: `1px solid ${theme.palette.divider}`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
                 }}
               >
                 <Button
                   size="small"
                   component={Link}
                   href="/contact"
-                  variant={pathname === '/contact' ? 'contained' : 'outlined'}
+                  variant={pathname === "/contact" ? "contained" : "outlined"}
                   sx={{ px: 2, fontWeight: 800 }}
                 >
                   Contact
                 </Button>
                 <Tooltip title="Toggle Theme">
-                    <IconButton size='small' onClick={colorMode.toggleColorMode}>
-                      {theme.palette.mode === 'dark' ? <LightMode /> : <DarkMode />}
-                    </IconButton>
+                  <IconButton size="small" onClick={colorMode.toggleColorMode}>
+                    {theme.palette.mode === "dark" ? (
+                      <LightMode />
+                    ) : (
+                      <DarkMode />
+                    )}
+                  </IconButton>
                 </Tooltip>
               </Box>
             </Box>
 
             {/* Mobile */}
-            <Box sx={{ display: { xs: 'flex', lg: 'none' }, alignItems: 'center', gap: 1 }}>
+            <Box
+              sx={{
+                display: { xs: "flex", lg: "none" },
+                alignItems: "center",
+                gap: 0,
+              }}
+            >
               <IconButton onClick={colorMode.toggleColorMode}>
-                {theme.palette.mode === 'dark' ? <LightMode /> : <DarkMode />}
-              </IconButton>
-              <IconButton onClick={handleDrawerToggle}>
-                <Menu />
+                {theme.palette.mode === "dark" ? <LightMode /> : <DarkMode />}
               </IconButton>
             </Box>
           </Toolbar>
@@ -285,17 +373,19 @@ const Header: React.FC = () => {
       </AppBar>
 
       <Drawer
-        anchor="right"
+        anchor="left"
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{ keepMounted: true }}
         sx={{
-          display: { xs: 'block', lg: 'none' },
-          '& .MuiDrawer-paper': {
-            boxSizing: 'border-box',
+          display: { xs: "block", lg: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
             width: 280,
-            opacity : "inherit",
-          }
+            opacity: "inherit",
+            borderRadius: 0,
+            overflowX: "hidden",
+          },
         }}
       >
         {drawer}

@@ -1,12 +1,18 @@
+import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
 import { ArrowForward, Info } from "@mui/icons-material";
-import { useTheme } from "@mui/material";
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import Link from "next/link";
+import { useContext } from "react";
 
 const HERO_TEXT = {
   status: "Open for new opportunities",
-  firstName: "VAIBHAV",
-  lastName: "SATOKAR",
   role: "Full Stack Developer",
   description:
     "Crafting high-quality, scalable web applications with expertise in .NET, React, and modern database systems. Turning complex challenges into elegant digital solutions.",
@@ -22,27 +28,37 @@ const HERO_TEXT = {
   },
 };
 
-
-
 export const Hero: React.FC = () => {
   const theme = useTheme();
+  const data = useContext(PortfolioDataContext);
+  const user = data?.USER ?? {
+    initials: "U",
+    fullName: "Portfolio User",
+    firstName: "Portfolio",
+    lastName: "User",
+  };
 
   return (
     <Box
       sx={{
         position: "relative",
-        minHeight: "100vh",
+        minHeight: "calc(100dvh - 56px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
+        pt: { xs: 2, md: 4 },
+        pb: { xs: 2, md: 3 },
       }}
     >
       <Box className="blob blob-1" />
       <Box className="blob blob-2" />
       <Box className="blob blob-3" />
 
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, textAlign: "center" }}>
+      <Container
+        maxWidth="lg"
+        sx={{ position: "relative", zIndex: 1, textAlign: "center" }}
+      >
         {/* STATUS */}
         <Box
           sx={{
@@ -91,7 +107,7 @@ export const Hero: React.FC = () => {
               mb: 1,
             }}
           >
-            {HERO_TEXT.firstName}
+            {user.firstName}
           </Typography>
           <Typography
             variant="h1"
@@ -104,17 +120,23 @@ export const Hero: React.FC = () => {
               lineHeight: 1,
             }}
           >
-            {HERO_TEXT.lastName}
+            {user.lastName}
           </Typography>
         </Box>
 
         {/* ROLE */}
-        <Stack direction="column" alignItems="center" spacing={2} sx={{ mb: 4 }}>
+        <Stack
+          direction="column"
+          alignItems="center"
+          spacing={2}
+          sx={{ mb: 4 }}
+        >
           <Box
             sx={{
               width: 100,
               height: 2,
-              background: "linear-gradient(90deg, transparent, #6366f1, transparent)",
+              background:
+                "linear-gradient(90deg, transparent, #6366f1, transparent)",
             }}
           />
           <Typography
@@ -147,7 +169,11 @@ export const Hero: React.FC = () => {
         </Typography>
 
         {/* CTA */}
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="center">
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={2}
+          justifyContent="center"
+        >
           <Button
             component={Link}
             href={HERO_TEXT.cta.primary.href}

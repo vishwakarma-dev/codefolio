@@ -1,248 +1,157 @@
-import { useContext } from "react";
+import { PageHero } from "@app/components/ui/PageHero";
+import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
+import { Email, GitHub, LinkedIn } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Container,
   Grid,
+  IconButton,
   Paper,
   Stack,
-  Typography,
-  Avatar,
   TextField,
-  Button,
-  Link,
   Tooltip,
-  IconButton,
-  Theme
 } from "@mui/material";
-import { Email, GitHub, LinkedIn } from "@mui/icons-material";
-import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
 import Head from "next/head";
-
+import { useContext } from "react";
 
 function ContactsPage() {
   const data = useContext(PortfolioDataContext);
   if (!data) return null;
+  const fullName = data.USER.fullName;
 
-  const { email, linkedin, github } = data.SOCIAL_LINKS;
+  const quickActions = [
+    {
+      key: "email",
+      label: "Email",
+      href: `mailto:${data.SOCIAL_LINKS.email}`,
+      icon: Email,
+    },
+    {
+      key: "linkedin",
+      label: "LinkedIn",
+      href: data.SOCIAL_LINKS.linkedin,
+      icon: LinkedIn,
+      external: true,
+    },
+    {
+      key: "github",
+      label: "GitHub",
+      href: data.SOCIAL_LINKS.github,
+      icon: GitHub,
+      external: true,
+    },
+  ];
 
   return (
     <>
       <Head>
-        <title>Vaibhav Satokar : Contact Me</title>
+        <title>{`${fullName} : Contact`}</title>
       </Head>
-      <Box
+
+      <Container
+        maxWidth="lg"
         sx={{
-          minHeight: "100vh",
+          height: "100%",
+          py: { xs: 2, md: 3 },
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
         }}
       >
-        <Container maxWidth="lg" sx={{ pt: 10 }}>
-          <Paper
-            elevation={0}
-            sx={(theme) => ({
-              p: { xs: 4, md: 8 },
-              border: `1px solid ${theme.palette.divider}`,
-              bgcolor: "background.paper",
-            })}
-          >
-            <Grid container spacing={8}>
-              {/* LEFT : PROFILE LINKS */}
-              <Grid size={{ xs: 12, md: 5 }}>
-                <Typography
-                  variant="h2"
-                  sx={{
-                    fontWeight: 900,
-                    mb: 3,
-                    fontFamily: "Space Grotesk"
-                  }}
-                >
-                  Let’s <Box component="span" sx={{ color: "primary.main" }}>connect</Box>.
-                </Typography>
+        <Paper sx={{ p: { xs: 2.2, md: 3.2 }, width: "100%" }}>
+          <Grid container spacing={{ xs: 2.2, md: 3 }}>
+            <Grid size={{ xs: 12, md: 5 }}>
+              <PageHero
+                label="Get In Touch"
+                title="Let's"
+                highlight="Connect"
+                description="Open to collaborating on scalable web products, platform improvements, and engineering modernization initiatives."
+                sx={{ mb: 2.4 }}
+              />
 
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: "text.secondary",
-                    fontSize: "1.1rem",
-                    mb: 6
-                  }}
-                >
-                  Prefer direct links? You can reach me instantly through any of the
-                  profiles below.
-                </Typography>
-
-                <Stack direction="row" spacing={3}>
-                  {/* EMAIL */}
-                  <Tooltip title="Email me" arrow>
-                    <IconButton
-                      component="a"
-                      href={`mailto:${data.SOCIAL_LINKS.email}`}
-                      sx={{
-                        bgcolor: "rgba(99,102,241,0.1)",
-                        color: "primary.main",
-                        width: 56,
-                        height: 56,
-                        "&:hover": {
-                          bgcolor: "primary.main",
-                          color: "primary.contrastText"
+              <Stack direction="row" spacing={1.4}>
+                {quickActions.map((action) => {
+                  const Icon = action.icon;
+                  return (
+                    <Tooltip key={action.key} title={action.label} arrow>
+                      <IconButton
+                        component="a"
+                        href={action.href}
+                        target={action.external ? "_blank" : undefined}
+                        rel={
+                          action.external ? "noopener noreferrer" : undefined
                         }
-                      }}
-                    >
-                      <Email fontSize="large" />
-                    </IconButton>
-                  </Tooltip>
-
-                  {/* LINKEDIN */}
-                  <Tooltip title="LinkedIn profile" arrow>
-                    <IconButton
-                      component="a"
-                      href={data.SOCIAL_LINKS.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{
-                        bgcolor: "rgba(99,102,241,0.1)",
-                        color: "primary.main",
-                        width: 56,
-                        height: 56,
-                        "&:hover": {
-                          bgcolor: "primary.main",
-                          color: "primary.contrastText"
-                        }
-                      }}
-                    >
-                      <LinkedIn fontSize="large" />
-                    </IconButton>
-                  </Tooltip>
-
-                  {/* GITHUB */}
-                  <Tooltip title="GitHub profile" arrow>
-                    <IconButton
-                      component="a"
-                      href={data.SOCIAL_LINKS.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{
-                        bgcolor: "rgba(99,102,241,0.1)",
-                        color: "primary.main",
-                        width: 56,
-                        height: 56,
-                        "&:hover": {
-                          bgcolor: "primary.main",
-                          color: "primary.contrastText"
-                        }
-                      }}
-                    >
-                      <GitHub fontSize="large" />
-                    </IconButton>
-                  </Tooltip>
-                </Stack>
-              </Grid>
-
-              {/* RIGHT : CONTACT FORM */}
-              <Grid size={{ xs: 12, md: 7 }}>
-                <Box
-                  sx={(theme) => ({
-                    p: { xs: 3, md: 5 },
-                    background:
-                      theme.palette.mode === "dark"
-                        ? "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))"
-                        : "linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0.01))",
-                    backdropFilter: "blur(10px)",
-                    border: `1px solid ${theme.palette.divider}`
-                  })}
-                >
-                  <Stack spacing={2} component="form">
-                    <Typography
-                      variant="h5"
-                      sx={{ fontWeight: 900, fontFamily: "Space Grotesk" }}
-                    >
-                      Send a message
-                    </Typography>
-
-                    <TextField
-                      fullWidth
-                      label="Full Name"
-                      placeholder="John Doe"
-                      variant="outlined"
-                      slotProps={{
-                        input : {
-                          sx: {
-                            bgcolor: "background.paper"
-                          }
-                        }
-                      }}
-                    />
-
-                    <TextField
-                      fullWidth
-                      label="Email Address"
-                      placeholder="john@example.com"
-                      variant="outlined"
-                      slotProps={{
-                        input : {
-                          sx: {
-                            bgcolor: "background.paper"
-                          }
-                        }
-                      }}
-                    />
-
-                    <TextField
-                      fullWidth
-                      label="Subject"
-                      placeholder="Let’s work together"
-                      slotProps={{
-                        input : {
-                          sx: {
-                            bgcolor: "background.paper"
-                          }
-                        }
-                      }}
-                    />
-
-                    <TextField
-                      fullWidth
-                      multiline
-                      rows={8}
-                      label="Your Message"
-                      placeholder="Tell me about your idea, timeline, or challenge…"
-                      slotProps={{
-                        input : {
-                          sx: {
-                            bgcolor: "background.paper"
-                          }
-                        }
-                      }}
-                    />
-
-                    <Button
-                      variant="contained"
-                      size="large"
-                      sx={{
-                        mt: 2,
-                        py: 1.8,
-                        fontWeight: 900,
-                        textTransform: "none",
-                        fontSize: "1rem",
-                        boxShadow: "0 12px 30px rgba(99,102,241,0.35)",
-                        "&:hover": {
-                          boxShadow: "0 16px 40px rgba(99,102,241,0.45)"
-                        }
-                      }}
-                    >
-                      Send Message →
-                    </Button>
-                  </Stack>
-                </Box>
-              </Grid>
-
+                        sx={{
+                          width: 48,
+                          height: 48,
+                          border: 1,
+                          borderColor: "divider",
+                          bgcolor: "action.hover",
+                          color: "primary.main",
+                          "&:hover": {
+                            bgcolor: "primary.main",
+                            color: "primary.contrastText",
+                          },
+                        }}
+                      >
+                        <Icon />
+                      </IconButton>
+                    </Tooltip>
+                  );
+                })}
+              </Stack>
             </Grid>
-          </Paper>
-        </Container>
-      </Box>
 
+            <Grid size={{ xs: 12, md: 7 }}>
+              <Box
+                sx={{
+                  p: { xs: 1.8, md: 2.2 },
+                  border: 1,
+                  borderColor: "divider",
+                  borderRadius: 1,
+                  bgcolor: "background.paper",
+                  maxHeight: { xs: "56vh", md: "none" },
+                  overflowY: { xs: "auto", md: "visible" },
+                }}
+              >
+                <Stack spacing={1.4} component="form">
+                  <TextField
+                    fullWidth
+                    label="Full Name"
+                    placeholder="John Doe"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Email Address"
+                    placeholder="john@example.com"
+                    type="email"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Subject"
+                    placeholder="Project discussion"
+                  />
+                  <TextField
+                    fullWidth
+                    multiline
+                    minRows={4}
+                    label="Your Message"
+                    placeholder="Tell me about your idea, timeline, or challenge..."
+                  />
+
+                  <Button
+                    variant="contained"
+                    size="medium"
+                    sx={{ mt: 0.8, py: 1 }}
+                  >
+                    Send Message
+                  </Button>
+                </Stack>
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Container>
     </>
   );
 }

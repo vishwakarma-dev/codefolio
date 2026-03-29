@@ -1,55 +1,58 @@
+import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
 import { Description, Email, GitHub, LinkedIn } from "@mui/icons-material";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
+import type { ElementType } from "react";
+import { useContext } from "react";
 
-export const DESKTOP_FLOATING_ACTIONS = {
-    actions: [
-      {
-        key: "email",
-        label: "Email me",
-        href: "mailto:vaibhav.satokar@outlook.com",
-        icon: Email,
-      },
-      {
-        key: "linkedin",
-        label: "LinkedIn",
-        href: "https://www.linkedin.com/in/vaibhav-satokar/",
-        icon: LinkedIn,
-        external: true,
-      },
-      {
-        key: "github",
-        label: "GitHub",
-        href: "https://github.com/vishwakarma-dev",
-        icon: GitHub,
-        external: true,
-      },
-      {
-        key: "cv",
-        label: "Download CV",
-        href: "/Vaibhav_Satokar_CV.pdf",
-        icon: Description,
-        variant: "secondary",
-        external: true,
-      },
-    ],
-  };
-
-const baseFabStyle = {
-  border: "2px solid",
-  borderColor: "palette.secondary",
-  width: 52,
-  height: 52,
-  boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
-  transition: "all 0.25s ease",
-  "&:hover": {
-    bgcolor: "primary.main",
-    color: "primary.contrastText",
-    transform: "translateX(2px)",
-    boxShadow: "0 10px 40px rgba(0,0,0,0.15)"
-  },
+type FloatingAction = {
+  key: string;
+  label: string;
+  href: string;
+  icon: ElementType;
+  external?: boolean;
+  variant?: "secondary";
 };
 
 export const DesktopFloatingActions = () => {
+  const theme = useTheme();
+  const data = useContext(PortfolioDataContext);
+
+  if (!data) return null;
+  const resumeFileName = decodeURIComponent(
+    data.SOCIAL_LINKS.resume.split("/").pop() || "resume.pdf",
+  );
+
+  const actions: FloatingAction[] = [
+    {
+      key: "email",
+      label: "Email me",
+      href: `mailto:${data.SOCIAL_LINKS.email}`,
+      icon: Email,
+    },
+    {
+      key: "linkedin",
+      label: "LinkedIn",
+      href: data.SOCIAL_LINKS.linkedin,
+      icon: LinkedIn,
+      external: true,
+    },
+    {
+      key: "github",
+      label: "GitHub",
+      href: data.SOCIAL_LINKS.github,
+      icon: GitHub,
+      external: true,
+    },
+    {
+      key: "resume",
+      label: "Download CV",
+      href: data.SOCIAL_LINKS.resume,
+      icon: Description,
+      external: true,
+      variant: "secondary",
+    },
+  ];
+
   return (
     <Box
       sx={{
@@ -57,40 +60,47 @@ export const DesktopFloatingActions = () => {
         right: 24,
         top: "50%",
         transform: "translateY(-50%)",
-        display: { xs: "none", md: "none", lg : "flex" },
+        display: { xs: "none", lg: "flex" },
         flexDirection: "column",
-        gap: 2,
+        gap: 1.5,
         zIndex: 1200,
       }}
     >
-      {DESKTOP_FLOATING_ACTIONS.actions.map((action) => {
+      {actions.map((action) => {
         const Icon = action.icon;
 
         return (
-          <Tooltip
-            key={action.key}
-            title={action.label}
-            placement="right"
-            arrow
-          >
+          <Tooltip key={action.key} title={action.label} placement="left" arrow>
             <IconButton
               component="a"
               href={action.href}
               target={action.external ? "_blank" : undefined}
               rel={action.external ? "noopener noreferrer" : undefined}
-              sx={(theme) => ({
-                ...baseFabStyle,
-                borderColor : theme.palette.secondary.main,
+              download={action.key === "resume" ? resumeFileName : undefined}
+              sx={{
+                width: 50,
+                height: 50,
+                border: `1px solid ${theme.palette.divider}`,
+                bgcolor: "background.paper",
+                color: "text.secondary",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+                transition: "all 0.25s ease",
+                "&:hover": {
+                  bgcolor: "primary.main",
+                  color: "primary.contrastText",
+                  transform: "translateX(3px)",
+                },
                 ...(action.variant === "secondary" && {
-                  bgcolor: theme.palette.secondary.main,
-                  color: theme.palette.secondary.contrastText,
+                  bgcolor: "secondary.main",
+                  color: "secondary.contrastText",
+                  borderColor: "secondary.main",
                   "&:hover": {
-                    bgcolor: theme.palette.secondary.dark,
-                    color: theme.palette.secondary.contrastText,
-                    transform: "translateX(4px)",
+                    bgcolor: "secondary.dark",
+                    color: "secondary.contrastText",
+                    transform: "translateX(3px)",
                   },
                 }),
-              })}
+              }}
             >
               <Icon />
             </IconButton>

@@ -1,10 +1,8 @@
-
-import { useMemo } from 'react';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import { ColorModeContext, useColorMode } from './ColorModeProvider';
-import { PortfolioDataProvider } from './PortfolioDataProvider';
-
-import { getTheme } from '@app/theme/themeFactory';
+import { getTheme } from "@app/theme/themeFactory";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { useMemo } from "react";
+import { ColorModeContext, useColorMode } from "./ColorModeProvider";
+import { PortfolioDataProvider } from "./PortfolioDataProvider";
 
 export const AppProviders: React.FC<{ children: React.ReactNode }> = ({
   children,

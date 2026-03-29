@@ -1,65 +1,85 @@
-import React, { useContext, useState } from 'react';
-import { 
-  Box, Container, Typography, Grid, Stack, Tabs, Tab, useTheme
-} from '@mui/material';
-import { PortfolioDataContext } from '@app/providers/PortfolioDataProvider';
-import { Project } from '@app/types';
-import { Construction } from '@mui/icons-material';
-import { ProjectDetailDialog } from '@app/components/ProjectDetailsDialog';
-import { ProjectCard } from '@app/components/ProjectCard';
-import Head from 'next/head';
+import { ProjectCard } from "@app/components/ProjectCard";
+import { ProjectDetailDialog } from "@app/components/ProjectDetailsDialog";
+import { PageHero } from "@app/components/ui/PageHero";
+import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
+import type { Project } from "@app/types";
+import { Construction } from "@mui/icons-material";
+import { Box, Chip, Container, Grid, Stack } from "@mui/material";
+import Head from "next/head";
+import { useContext, useState } from "react";
+
+const PROJECT_CATEGORIES: ("All" | Project["category"])[] = [
+  "All",
+  "Full Stack",
+  "Frontend",
+  "Mobile",
+  "AI/ML",
+];
 
 function ProjectsPage() {
   const data = useContext(PortfolioDataContext);
-  const [filter, setFilter] = useState<'All' | Project['category']>('All');
+  const [filter, setFilter] = useState<"All" | Project["category"]>("All");
   const [selected, setSelected] = useState<Project | null>(null);
 
   if (!data) return null;
+  const fullName = data.USER.fullName;
 
-  const filtered = filter === 'All' ? data.PROJECTS : data.PROJECTS.filter(p => p.category === filter);
-  const categories: ('All' | Project['category'])[] = ['All', 'Full Stack', 'Frontend', 'Mobile', 'AI/ML'];
+  const filteredProjects =
+    filter === "All"
+      ? data.PROJECTS
+      : data.PROJECTS.filter((project) => project.category === filter);
 
   return (
     <>
       <Head>
-        <title>
-          Vaibhav Satokar : Projects
-        </title>
+        <title>{`${fullName} : Projects`}</title>
       </Head>
-      <Container maxWidth="lg" sx={{ py: 15 }}>
-        <Box sx={{ mb: 8 }}>
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
-            <Construction color="primary" fontSize="small" />
-            <Typography variant="overline" sx={{ fontWeight: 900, color: 'primary.main', letterSpacing: 2 }}>Engineering Portfolio</Typography>
-          </Stack>
-          <Typography variant="h2" sx={{ fontWeight: 900, mb: 2, fontFamily: 'Space Grotesk' }}>
-            Powerful <Box component="span" sx={{ color: 'primary.main' }}>Solutions</Box>
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'text.secondary', maxWidth: 650, mb: 6 }}>
-            Building reliable, high-performance systems from the database layer to the user interface.
-          </Typography>
 
-          <Tabs 
-            value={filter} 
-            onChange={(_, val) => setFilter(val)} 
-            sx={{ borderBottom: 1, borderColor: 'divider', mb: 6, '& .MuiTab-root': { fontWeight: 800 } }}
-          >
-            {categories.map(cat => <Tab key={cat} label={cat} value={cat} />)}
-          </Tabs>
+      <Container
+        maxWidth="lg"
+        sx={{ pt: { xs: 7, md: 8 }, pb: { xs: 10, md: 12 } }}
+      >
+        <PageHero
+          label="Engineering Portfolio"
+          icon={<Construction color="primary" fontSize="small" />}
+          title="Powerful"
+          highlight="Solutions"
+          description="From architecture to interface, these projects focus on reliability, maintainability, and measurable business impact."
+          sx={{ mb: 7 }}
+        />
+
+        <Box sx={{ mb: 5 }}>
+          <Stack direction="row" spacing={1.2} flexWrap="wrap" useFlexGap>
+            {PROJECT_CATEGORIES.map((category) => (
+              <Chip
+                key={category}
+                label={category}
+                clickable
+                onClick={() => setFilter(category)}
+                color={filter === category ? "primary" : "default"}
+                variant={filter === category ? "filled" : "outlined"}
+                sx={{ fontWeight: 800, px: 0.6 }}
+              />
+            ))}
+          </Stack>
         </Box>
 
-        <Grid container spacing={4}>
-          {filtered.map(project => (
-            <Grid key={project.id} size={{ xs: 12, md: 6, lg: 4 }}>
+        <Grid container spacing={2.5}>
+          {filteredProjects.map((project) => (
+            <Grid key={project.id} size={{ xs: 12, sm: 6, md: 4 }}>
               <ProjectCard project={project} onOpen={setSelected} />
             </Grid>
           ))}
         </Grid>
 
-        <ProjectDetailDialog project={selected} open={!!selected} onClose={() => setSelected(null)} />
+        <ProjectDetailDialog
+          project={selected}
+          open={Boolean(selected)}
+          onClose={() => setSelected(null)}
+        />
       </Container>
     </>
   );
-};
+}
 
 export default ProjectsPage;

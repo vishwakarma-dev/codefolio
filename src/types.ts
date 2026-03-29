@@ -1,4 +1,3 @@
-
 export interface Project {
   id: string;
   title: string;
@@ -9,18 +8,29 @@ export interface Project {
   imageUrl: string;
   demoUrl: string;
   githubUrl: string;
-  category: 'Full Stack' | 'Frontend' | 'Mobile' | 'AI/ML';
+  category: "Full Stack" | "Frontend" | "Mobile" | "AI/ML";
 }
 
 // Added 'Database' to category union to support database-specific skills in the portfolio data
 export interface Skill {
   name: string;
   level: number;
-  category: 'Frontend' | 'Backend' | 'Tools' | 'AI' | 'Database';
+  category:
+    | "Frontend"
+    | "Backend"
+    | "Tools"
+    | "AI"
+    | "Database"
+    | "Version Control"
+    | "Deployment"
+    | "IDE"
+    | "Framework"
+    | "Testing"
+    | "Other";
 }
 
 export interface ChatMessage {
-  role: 'user' | 'model';
+  role: "user" | "model";
   text: string;
   timestamp: Date;
 }

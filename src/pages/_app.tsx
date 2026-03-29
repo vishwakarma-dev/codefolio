@@ -1,9 +1,9 @@
 import "@app/styles/globals.css";
 
-import type { AppProps } from 'next/app';
-import { AppCacheProvider } from '@mui/material-nextjs/v15-pagesRouter';
-import { AppProviders } from '@app/providers/AppProviders';
-import AppLayout from '@app/Layout/AppLayout';
+import AppLayout from "@app/Layout/AppLayout";
+import { AppProviders } from "@app/providers/AppProviders";
+import { AppCacheProvider } from "@mui/material-nextjs/v15-pagesRouter";
+import type { AppProps } from "next/app";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
