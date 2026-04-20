@@ -1,4 +1,12 @@
-import { NAV_LINKS } from "@app/config/navigation";
+import {
+  ALL_SECTION_LINKS,
+  CONTACT_LINK,
+  DEFAULT_SECTION_ID,
+  getSectionHref,
+  isSectionId,
+  NAV_LINKS,
+  type SectionId,
+} from "@app/config/navigation";
 import { ColorModeContext } from "@app/providers/ColorModeProvider";
 import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
 import {
@@ -29,17 +37,16 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type React from "react";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 const Header: React.FC = () => {
   const theme = useTheme();
-  const pathname = usePathname();
   const colorMode = useContext(ColorModeContext);
   const data = useContext(PortfolioDataContext);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] =
+    useState<SectionId>(DEFAULT_SECTION_ID);
   const resumeHref = data?.SOCIAL_LINKS.resume;
   const resumeFileName = resumeHref
     ? decodeURIComponent(resumeHref.split("/").pop() || "resume.pdf")
@@ -54,6 +61,94 @@ const Header: React.FC = () => {
   const handleDrawerToggle = () => {
     setMobileOpen((prev) => !prev);
   };
+
+  const closeDrawer = () => {
+    setMobileOpen(false);
+  };
+
+  const syncActiveSectionFromScroll = useCallback(() => {
+    if (typeof window === "undefined") return;
+
+    const sectionElements = ALL_SECTION_LINKS.map((link) =>
+      document.getElementById(link.sectionId),
+    ).filter(
+      (section): section is HTMLElement => section instanceof HTMLElement,
+    );
+
+    let nextActive = DEFAULT_SECTION_ID;
+
+    for (const section of sectionElements) {
+      if (section.getBoundingClientRect().top <= 120) {
+        nextActive = section.id as SectionId;
+      }
+    }
+
+    setActiveSection(nextActive);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    let animationFrameId = 0;
+
+    const syncActiveSectionFromHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (isSectionId(hash)) {
+        setActiveSection(hash);
+        return;
+      }
+      syncActiveSectionFromScroll();
+    };
+
+    const handleScroll = () => {
+      window.cancelAnimationFrame(animationFrameId);
+      animationFrameId = window.requestAnimationFrame(
+        syncActiveSectionFromScroll,
+      );
+    };
+
+    syncActiveSectionFromHash();
+    handleScroll();
+
+    window.addEventListener("hashchange", syncActiveSectionFromHash);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("hashchange", syncActiveSectionFromHash);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [syncActiveSectionFromScroll]);
+
+  const navigateToSection =
+    (sectionId: SectionId, shouldCloseDrawer = false) =>
+    (event: React.MouseEvent<HTMLElement>) => {
+      if (shouldCloseDrawer) {
+        closeDrawer();
+      }
+
+      setActiveSection(sectionId);
+
+      if (typeof window === "undefined") return;
+      if (window.location.pathname !== "/") return;
+
+      event.preventDefault();
+
+      const target = document.getElementById(sectionId);
+      if (!target) return;
+
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      const nextHash = `#${sectionId}`;
+      if (window.location.hash === nextHash) {
+        window.history.replaceState(null, "", nextHash);
+        return;
+      }
+
+      window.history.pushState(null, "", nextHash);
+    };
 
   const drawer = (
     <Box
@@ -87,14 +182,14 @@ const Header: React.FC = () => {
       <Divider />
       <List sx={{ flexGrow: 1 }}>
         {NAV_LINKS.map((link) => {
-          const isActive = pathname === link.path;
+          const isActive = activeSection === link.sectionId;
 
           return (
-            <ListItem key={link.path} disablePadding sx={{ mb: 1 }}>
+            <ListItem key={link.sectionId} disablePadding sx={{ mb: 1 }}>
               <ListItemButton
-                component={Link}
-                href={link.path}
-                onClick={handleDrawerToggle}
+                component="a"
+                href={getSectionHref(link.sectionId)}
+                onClick={navigateToSection(link.sectionId, true)}
                 sx={{
                   borderRadius: 2,
                   bgcolor: isActive ? "primary.main" : "transparent",
@@ -118,29 +213,29 @@ const Header: React.FC = () => {
 
         <Divider sx={{ my: 2 }} />
 
-        {(() => {
-          const isActive = pathname === "/contact";
-
-          return (
-            <ListItem disablePadding>
-              <ListItemButton
-                component={Link}
-                href="/contact"
-                onClick={handleDrawerToggle}
-                sx={{
-                  borderRadius: 2,
-                  bgcolor: isActive ? "primary.main" : "transparent",
-                  color: isActive ? "primary.contrastText" : "text.primary",
-                }}
-              >
-                <ListItemText
-                  primary="Contact"
-                  primaryTypographyProps={{ fontWeight: 800 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          );
-        })()}
+        <ListItem disablePadding>
+          <ListItemButton
+            component="a"
+            href={getSectionHref(CONTACT_LINK.sectionId)}
+            onClick={navigateToSection(CONTACT_LINK.sectionId, true)}
+            sx={{
+              borderRadius: 2,
+              bgcolor:
+                activeSection === CONTACT_LINK.sectionId
+                  ? "primary.main"
+                  : "transparent",
+              color:
+                activeSection === CONTACT_LINK.sectionId
+                  ? "primary.contrastText"
+                  : "text.primary",
+            }}
+          >
+            <ListItemText
+              primary={CONTACT_LINK.label}
+              primaryTypographyProps={{ fontWeight: 800 }}
+            />
+          </ListItemButton>
+        </ListItem>
       </List>
 
       <Stack spacing={2} sx={{ mt: "auto" }}>
@@ -225,8 +320,9 @@ const Header: React.FC = () => {
 
             {/* Logo */}
             <Box
-              component={Link}
-              href="/"
+              component="a"
+              href={getSectionHref(DEFAULT_SECTION_ID)}
+              onClick={navigateToSection(DEFAULT_SECTION_ID)}
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -294,13 +390,14 @@ const Header: React.FC = () => {
               }}
             >
               {NAV_LINKS.map((link) => {
-                const isActive = pathname === link.path;
+                const isActive = activeSection === link.sectionId;
 
                 return (
                   <Button
-                    key={link.path}
-                    component={Link}
-                    href={link.path}
+                    key={link.sectionId}
+                    component="a"
+                    href={getSectionHref(link.sectionId)}
+                    onClick={navigateToSection(link.sectionId)}
                     sx={{
                       px: 2,
                       fontWeight: 700,
@@ -337,12 +434,17 @@ const Header: React.FC = () => {
               >
                 <Button
                   size="small"
-                  component={Link}
-                  href="/contact"
-                  variant={pathname === "/contact" ? "contained" : "outlined"}
+                  component="a"
+                  href={getSectionHref(CONTACT_LINK.sectionId)}
+                  onClick={navigateToSection(CONTACT_LINK.sectionId)}
+                  variant={
+                    activeSection === CONTACT_LINK.sectionId
+                      ? "contained"
+                      : "outlined"
+                  }
                   sx={{ px: 2, fontWeight: 800 }}
                 >
-                  Contact
+                  {CONTACT_LINK.label}
                 </Button>
                 <Tooltip title="Toggle Theme">
                   <IconButton size="small" onClick={colorMode.toggleColorMode}>
@@ -375,7 +477,7 @@ const Header: React.FC = () => {
       <Drawer
         anchor="left"
         open={mobileOpen}
-        onClose={handleDrawerToggle}
+        onClose={closeDrawer}
         ModalProps={{ keepMounted: true }}
         sx={{
           display: { xs: "block", lg: "none" },

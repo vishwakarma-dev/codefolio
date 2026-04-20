@@ -13,9 +13,10 @@ import Mongodb from "@thesvg/react/mongodb";
 import ProTools from "@thesvg/react/pro-tools";
 import ReactLogo from "@thesvg/react/react";
 import Selenium from "@thesvg/react/selenium";
-import Head from "next/head";
 import type { ComponentType } from "react";
 import { useContext, useEffect, useState } from "react";
+
+import { SinglePageSection } from "./SinglePageSection";
 
 type IconComponent = ComponentType<SvgIconProps>;
 
@@ -32,17 +33,16 @@ const CATEGORY_ICONS: Record<string, IconComponent> = {
   testing: Selenium,
 };
 
-const SkillsPage: React.FC = () => {
+export const SkillsSection = () => {
   const [isAnimate, setIsAnimate] = useState(false);
   const data = useContext(PortfolioDataContext);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsAnimate(true), 200);
-    return () => clearTimeout(timer);
+    const timer = window.setTimeout(() => setIsAnimate(true), 200);
+    return () => window.clearTimeout(timer);
   }, []);
 
   if (!data) return null;
-  const fullName = data.USER.fullName;
 
   const groupedSkills = data.SKILLS.reduce(
     (acc, skill) => {
@@ -70,11 +70,7 @@ const SkillsPage: React.FC = () => {
   };
 
   return (
-    <>
-      <Head>
-        <title>{`${fullName} : Skills`}</title>
-      </Head>
-
+    <SinglePageSection id="skills">
       <Container
         maxWidth="lg"
         sx={{ pt: { xs: 7, md: 8 }, pb: { xs: 10, md: 12 } }}
@@ -118,8 +114,6 @@ const SkillsPage: React.FC = () => {
           ))}
         </Stack>
       </Container>
-    </>
+    </SinglePageSection>
   );
 };
-
-export default SkillsPage;

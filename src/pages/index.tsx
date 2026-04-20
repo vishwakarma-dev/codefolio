@@ -1,5 +1,9 @@
-import { Hero } from "@app/components/HeroCard";
 import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
+import { AboutSection } from "@app/sections/AboutSection";
+import { ContactSection } from "@app/sections/ContactSection";
+import { HomeSection } from "@app/sections/HomeSection";
+import { ProjectsSection } from "@app/sections/ProjectsSection";
+import { SkillsSection } from "@app/sections/SkillsSection";
 import Head from "next/head";
 import { useContext } from "react";
 
@@ -19,9 +23,11 @@ export default function HomePage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <Hero />
-      </main>
+      <HomeSection />
+      <AboutSection />
+      <ProjectsSection />
+      <SkillsSection />
+      <ContactSection />
     </>
   );
 }

@@ -1,7 +1,6 @@
 import { DesktopFloatingActions } from "@app/components/DesktopFloatingActions";
 import Header from "@app/components/Header";
 import { Box } from "@mui/material";
-import { useRouter } from "next/router";
 import type { ReactNode } from "react";
 
 interface AppLayoutProps {
@@ -9,19 +8,15 @@ interface AppLayoutProps {
 }
 
 const AppLayout = ({ children }: AppLayoutProps) => {
-  const router = useRouter();
-  const disablePageScroll =
-    router.pathname === "/" || router.pathname === "/contact";
-
   return (
     <Box
       sx={{
-        height: "100dvh",
+        minHeight: "100dvh",
         display: "flex",
         flexDirection: "column",
         bgcolor: "background.default",
         position: "relative",
-        overflow: "hidden",
+        overflowX: "hidden",
       }}
     >
       <Box
@@ -45,12 +40,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         sx={{
           flexGrow: 1,
           width: "100%",
-          height: "calc(100dvh - 56px)",
           mt: "56px",
-          overflowY: disablePageScroll ? "hidden" : "auto",
-          overflowX: "hidden",
-          WebkitOverflowScrolling: "touch",
-          overscrollBehavior: "contain",
           position: "relative",
           zIndex: 1,
         }}

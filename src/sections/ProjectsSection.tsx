@@ -5,8 +5,9 @@ import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
 import type { Project } from "@app/types";
 import { Construction } from "@mui/icons-material";
 import { Box, Chip, Container, Grid, Stack } from "@mui/material";
-import Head from "next/head";
 import { useContext, useState } from "react";
+
+import { SinglePageSection } from "./SinglePageSection";
 
 const PROJECT_CATEGORIES: ("All" | Project["category"])[] = [
   "All",
@@ -16,13 +17,12 @@ const PROJECT_CATEGORIES: ("All" | Project["category"])[] = [
   "AI/ML",
 ];
 
-function ProjectsPage() {
+export const ProjectsSection = () => {
   const data = useContext(PortfolioDataContext);
   const [filter, setFilter] = useState<"All" | Project["category"]>("All");
   const [selected, setSelected] = useState<Project | null>(null);
 
   if (!data) return null;
-  const fullName = data.USER.fullName;
 
   const filteredProjects =
     filter === "All"
@@ -30,11 +30,7 @@ function ProjectsPage() {
       : data.PROJECTS.filter((project) => project.category === filter);
 
   return (
-    <>
-      <Head>
-        <title>{`${fullName} : Projects`}</title>
-      </Head>
-
+    <SinglePageSection id="projects">
       <Container
         maxWidth="lg"
         sx={{ pt: { xs: 7, md: 8 }, pb: { xs: 10, md: 12 } }}
@@ -78,8 +74,6 @@ function ProjectsPage() {
           onClose={() => setSelected(null)}
         />
       </Container>
-    </>
+    </SinglePageSection>
   );
-}
-
-export default ProjectsPage;
+};

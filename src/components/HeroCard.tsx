@@ -8,7 +8,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import Link from "next/link";
 import { useContext } from "react";
 
 const HERO_TEXT = {
@@ -19,11 +18,11 @@ const HERO_TEXT = {
   cta: {
     primary: {
       label: "View Projects",
-      href: "/projects",
+      href: "/#projects",
     },
     secondary: {
       label: "Learn More",
-      href: "/about",
+      href: "/#about",
     },
   },
 };
@@ -175,7 +174,7 @@ export const Hero: React.FC = () => {
           justifyContent="center"
         >
           <Button
-            component={Link}
+            component="a"
             href={HERO_TEXT.cta.primary.href}
             variant="contained"
             size="large"

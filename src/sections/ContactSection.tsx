@@ -12,15 +12,23 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import Head from "next/head";
 import { useContext } from "react";
 
-function ContactsPage() {
+import { SinglePageSection } from "./SinglePageSection";
+
+type QuickAction = {
+  key: string;
+  label: string;
+  href: string;
+  icon: typeof Email;
+  external?: boolean;
+};
+
+export const ContactSection = () => {
   const data = useContext(PortfolioDataContext);
   if (!data) return null;
-  const fullName = data.USER.fullName;
 
-  const quickActions = [
+  const quickActions: QuickAction[] = [
     {
       key: "email",
       label: "Email",
@@ -44,20 +52,8 @@ function ContactsPage() {
   ];
 
   return (
-    <>
-      <Head>
-        <title>{`${fullName} : Contact`}</title>
-      </Head>
-
-      <Container
-        maxWidth="lg"
-        sx={{
-          height: "100%",
-          py: { xs: 2, md: 3 },
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+    <SinglePageSection id="contact" sx={{ paddingY: { xs: 4, md: 12 }, marginY: { xs:2, md :12} }}>
+      <Container maxWidth="lg"  sx={{ pt: { xs: 2, md: 3 } }}>
         <Paper sx={{ p: { xs: 2.2, md: 3.2 }, width: "100%" }}>
           <Grid container spacing={{ xs: 2.2, md: 3 }}>
             <Grid size={{ xs: 12, md: 5 }}>
@@ -110,8 +106,6 @@ function ContactsPage() {
                   borderColor: "divider",
                   borderRadius: 1,
                   bgcolor: "background.paper",
-                  maxHeight: { xs: "56vh", md: "none" },
-                  overflowY: { xs: "auto", md: "visible" },
                 }}
               >
                 <Stack spacing={1.4} component="form">
@@ -152,8 +146,6 @@ function ContactsPage() {
           </Grid>
         </Paper>
       </Container>
-    </>
+    </SinglePageSection>
   );
-}
-
-export default ContactsPage;
+};
