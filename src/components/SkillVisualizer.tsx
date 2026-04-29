@@ -1,146 +1,139 @@
-import type { Skill } from "@app/types";
+import type { Skill } from "../../types";
 import { Box, Paper, Typography, useTheme } from "@mui/material";
-import type { SvgIconProps } from "@thesvg/react";
-import Canva from "@thesvg/react/canva";
-import Codeberg from "@thesvg/react/codeberg";
-import Csharp from "@thesvg/react/csharp";
-import Dotnet from "@thesvg/react/dotnet";
-import EclipseIde from "@thesvg/react/eclipse-ide";
-import Expressdotjs from "@thesvg/react/expressdotjs";
-import Git from "@thesvg/react/git";
-import Github from "@thesvg/react/github";
-import GithubCopilot from "@thesvg/react/github-copilot";
-import GithubPages from "@thesvg/react/github-pages";
-import Google from "@thesvg/react/google";
-import GoogleGemini from "@thesvg/react/google-gemini";
-import Java from "@thesvg/react/java";
-import Javascript from "@thesvg/react/javascript";
-import MicrosoftSqlServer from "@thesvg/react/microsoft-sql-server";
-import Mongodb from "@thesvg/react/mongodb";
-import Mui from "@thesvg/react/mui";
-import Nextdotjs from "@thesvg/react/nextdotjs";
-import Postman from "@thesvg/react/postman";
-import Python from "@thesvg/react/python";
-import ReactLogo from "@thesvg/react/react";
-import Selenium from "@thesvg/react/selenium";
-import Typescript from "@thesvg/react/typescript";
-import Vercel from "@thesvg/react/vercel";
-import VisualStudio from "@thesvg/react/visual-studio";
-import VisualStudioCode from "@thesvg/react/visual-studio-code";
-import Vite from "@thesvg/react/vite";
-import type { ComponentType } from "react";
+import { alpha } from "@mui/material/styles";
+import Image from "next/image";
 
-type IconComponent = ComponentType<SvgIconProps>;
+const getIconUrl = (slug: string) =>
+  `https://thesvg.org/icons/${slug}/default.svg`;
 
-const iconMap: Record<string, IconComponent> = {
-  JavaScript: Javascript,
-  TypeScript: Typescript,
-  MUI: Mui,
-  "React JS": ReactLogo,
-  "Next JS": Nextdotjs,
-  Vite: Vite,
-  ".Net Core": Dotnet,
-  "C#": Csharp,
-  "Express JS": Expressdotjs,
-  MSSQL: MicrosoftSqlServer,
-  MongoDB: Mongodb,
-  Python: Python,
-  "Gemini AI": GoogleGemini,
-  "Stitch by Google": Google,
-  "GitHub Copilot": GithubCopilot,
-  Git: Git,
-  GitHub: Github,
-  "GitHub Pages": GithubPages,
-  "Git / GitHub": Github,
-  Java: Java,
-  Selenium: Selenium,
-  Canva: Canva,
-  "Visual Studio": VisualStudio,
-  "VS Code": VisualStudioCode,
-  Eclipse: EclipseIde,
-  Postman: Postman,
-  Vercel: Vercel,
+const getMonoIconUrl = (slug: string) =>
+  `https://thesvg.org/icons/${slug}/mono.svg`;
+
+const iconMap: Record<string, string> = {
+  JavaScript: getIconUrl("javascript"),
+  TypeScript: getIconUrl("typescript"),
+  MUI: getIconUrl("mui"),
+  "React JS": getIconUrl("react"),
+  "Next JS": getIconUrl("nextdotjs"),
+  Vite: getIconUrl("vite"),
+  ".Net Core": getIconUrl("dotnet"),
+  "C#": getIconUrl("csharp"),
+  "Express JS": getMonoIconUrl("express"),
+  MSSQL: getIconUrl("microsoft-sql-server"),
+  MongoDB: getIconUrl("mongodb"),
+  Python: getIconUrl("python"),
+  "Gemini AI": getIconUrl("google-gemini"),
+  "Stitch by Google": getIconUrl("google"),
+  "GitHub Copilot": getMonoIconUrl("github-copilot"),
+  Git: getIconUrl("git"),
+  GitHub: getMonoIconUrl("github"),
+  "GitHub Pages": getMonoIconUrl("github-pages"),
+  "Git / GitHub": getMonoIconUrl("github"),
+  Java: getIconUrl("java"),
+  Selenium: getIconUrl("selenium"),
+  Canva: getIconUrl("canva"),
+  "Visual Studio": getIconUrl("visual-studio"),
+  "VS Code": getIconUrl("visual-studio-code"),
+  Eclipse: getIconUrl("eclipse-ide"),
+  Postman: getIconUrl("postman"),
+  Vercel: getMonoIconUrl("vercel"),
 };
+
+const darkModeInvertIcons = [
+  "GitHub",
+  "GitHub Copilot",
+  "Git / GitHub",
+  "Express JS",
+  "GitHub Pages",
+  "Vercel",
+];
 
 export const SkillCard: React.FC<{ skill: Skill; animate: boolean }> = ({
   skill,
   animate,
 }) => {
   const theme = useTheme();
-  const Icon = iconMap[skill.name] ?? Codeberg;
-  const needsThemeMonoIconFix = [
-    "GitHub",
-    "GitHub Copilot",
-    "Git / GitHub",
-    "Express JS",
-    "GitHub Pages",
-    "Vercel",
-  ].includes(skill.name);
+  const iconUrl = iconMap[skill.name] ?? getIconUrl("codeberg");
   const shouldInvertInDarkMode =
-    skill.name === "Next JS" && theme.palette.mode === "dark";
+    darkModeInvertIcons.includes(skill.name) && theme.palette.mode === "dark";
+  const imageFilter = shouldInvertInDarkMode ? "invert(1)" : "none";
 
   return (
     <Paper
-      elevation={2}
+      elevation={0}
       sx={{
-        p: 2.5,
+        p: 2,
+        minHeight: 112,
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         gap: 1.5,
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: "12px",
-        bgcolor: "background.paper",
-        transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+        border: `1px solid ${alpha(theme.palette.text.primary, 0.1)}`,
+        borderRadius: "10px",
+        bgcolor:
+          theme.palette.mode === "dark"
+            ? alpha(theme.palette.background.paper, 0.78)
+            : alpha(theme.palette.background.paper, 0.94),
+        backdropFilter: "blur(14px)",
+        transition:
+          "transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease, background-color 220ms ease",
         opacity: animate ? 1 : 0,
-        transform: animate ? "translateY(0)" : "translateY(20px)",
+        transform: animate ? "translateY(0)" : "translateY(14px)",
+        "@media (prefers-reduced-motion: reduce)": {
+          transition: "none",
+          transform: "none",
+        },
         "&:hover": {
-          borderColor: "primary.main",
-          transform: "translateY(-8px) scale(1.02)",
+          borderColor: alpha(theme.palette.primary.main, 0.5),
+          transform: animate ? "translateY(-4px)" : undefined,
           boxShadow:
             theme.palette.mode === "dark"
-              ? "0 10px 30px rgba(0,0,0,0.5)"
-              : "0 10px 30px rgba(99, 102, 241, 0.1)",
-          "& svg": {
-            filter: `${shouldInvertInDarkMode ? "invert(1) " : ""}drop-shadow(0 0 8px ${theme.palette.primary.main}44)`,
+              ? `0 18px 42px ${alpha("#020617", 0.42)}`
+              : `0 18px 42px ${alpha(theme.palette.primary.main, 0.13)}`,
+          "& img": {
+            filter: `${imageFilter === "invert(1)" ? "invert(1) " : ""}drop-shadow(0 8px 14px ${alpha(theme.palette.primary.main, 0.24)})`,
           },
         },
       }}
     >
       <Box
         sx={{
-          width: 40,
-          height: 40,
+          width: 48,
+          height: 48,
+          flex: "0 0 auto",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          "& svg": {
-            width: "100%",
-            height: "100%",
-            transition: "filter 0.3s ease",
-            filter: shouldInvertInDarkMode ? "invert(1)" : "none",
+          borderRadius: "10px",
+          bgcolor: alpha(theme.palette.primary.main, 0.08),
+          border: `1px solid ${alpha(theme.palette.primary.main, 0.14)}`,
+          "& img": {
+            transition: "filter 220ms ease",
+            filter: imageFilter,
           },
-          ...(needsThemeMonoIconFix && {
-            "& svg": {
-              color: theme.palette.text.primary,
-              fill: theme.palette.text.primary,
-            },
-            "& svg *": {
-              fill: `${theme.palette.text.primary} !important`,
-              stroke: `${theme.palette.text.primary} !important`,
-            },
-          }),
         }}
       >
-        <Icon width={40} height={40} aria-label={skill.name} role="img" />
+        <Image src={iconUrl} alt={skill.name} width={30} height={30} />
       </Box>
-      <Typography
-        variant="body2"
-        sx={{ fontWeight: 800, fontSize: "0.85rem", textAlign: "center" }}
-      >
-        {skill.name}
-      </Typography>
+      <Box sx={{ minWidth: 0 }}>
+        <Typography
+          variant="subtitle2"
+          sx={{
+            fontWeight: 900,
+            lineHeight: 1.2,
+            overflowWrap: "anywhere",
+          }}
+        >
+          {skill.name}
+        </Typography>
+        <Typography
+          variant="caption"
+          sx={{ color: "text.secondary", fontWeight: 700 }}
+        >
+          {skill.category}
+        </Typography>
+      </Box>
     </Paper>
   );
 };

@@ -1,5 +1,6 @@
 import { DesktopFloatingActions } from "@app/components/DesktopFloatingActions";
 import Header from "@app/components/Header";
+import { ScrollToTopButton } from "@app/components/ScrollToTopButton";
 import { Box } from "@mui/material";
 import type { ReactNode } from "react";
 
@@ -33,6 +34,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       {/* Top Navigation */}
       <Header />
       <DesktopFloatingActions />
+      <ScrollToTopButton />
 
       {/* Main Content */}
       <Box

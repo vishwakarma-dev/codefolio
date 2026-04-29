@@ -1,4 +1,4 @@
-import type { Project } from "@app/types";
+import type { Project } from "../../types";
 import { Close, GitHub, Layers, RocketLaunch } from "@mui/icons-material";
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 
 export const ProjectDetailDialog: React.FC<{
   project: Project | null;
@@ -31,7 +32,12 @@ export const ProjectDetailDialog: React.FC<{
       PaperProps={{
         sx: {
           bgcolor: "background.paper",
-          border: `1px solid ${theme.palette.divider}`,
+          border: `1px solid ${alpha(theme.palette.text.primary, 0.12)}`,
+          borderRadius: 2,
+          boxShadow:
+            theme.palette.mode === "dark"
+              ? `0 22px 60px ${alpha("#020617", 0.56)}`
+              : `0 22px 60px ${alpha(theme.palette.text.primary, 0.16)}`,
           maxHeight: "86vh",
         },
       }}
@@ -46,6 +52,7 @@ export const ProjectDetailDialog: React.FC<{
             zIndex: 10,
             bgcolor: "rgba(0,0,0,0.5)",
             color: "white",
+            borderRadius: 1.5,
             p: 0.8,
             "&:hover": { bgcolor: "rgba(0,0,0,0.8)" },
           }}
@@ -58,10 +65,12 @@ export const ProjectDetailDialog: React.FC<{
             height: { xs: 160, md: 220 },
             width: "100%",
             overflow: "hidden",
+            borderBottom: `1px solid ${theme.palette.divider}`,
           }}
         >
           <Box
             component="img"
+            alt={project.title}
             src={project.imageUrl}
             sx={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
@@ -73,13 +82,18 @@ export const ProjectDetailDialog: React.FC<{
               label={project.category}
               color="primary"
               size="small"
-              sx={{ fontWeight: 800 }}
+              sx={{ borderRadius: 1.2, fontWeight: 800 }}
             />
           </Stack>
 
           <Typography
             variant="h4"
-            sx={{ fontWeight: 900, mb: 1.4, fontFamily: "Space Grotesk" }}
+            sx={{
+              fontWeight: 900,
+              mb: 1.4,
+              fontFamily: "Space Grotesk",
+              lineHeight: 1.12,
+            }}
           >
             {project.title}
           </Typography>
@@ -123,6 +137,7 @@ export const ProjectDetailDialog: React.FC<{
                   fontWeight: 700,
                   border: `1px solid ${theme.palette.divider}`,
                   bgcolor: "transparent",
+                  borderRadius: 1.2,
                 }}
               />
             ))}
@@ -133,7 +148,7 @@ export const ProjectDetailDialog: React.FC<{
               variant="contained"
               startIcon={<RocketLaunch />}
               size="small"
-              sx={{ px: 2.2, py: 0.8, fontWeight: 700 }}
+              sx={{ px: 2.2, py: 0.8, fontWeight: 800, borderRadius: 1.5 }}
             >
               Live Demo
             </Button>
@@ -141,7 +156,7 @@ export const ProjectDetailDialog: React.FC<{
               variant="outlined"
               startIcon={<GitHub />}
               size="small"
-              sx={{ px: 2.2, py: 0.8, fontWeight: 700 }}
+              sx={{ px: 2.2, py: 0.8, fontWeight: 800, borderRadius: 1.5 }}
             >
               Source Code
             </Button>

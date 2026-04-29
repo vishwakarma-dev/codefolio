@@ -1,19 +1,27 @@
 import { Avatar, Stack, Typography } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
 import type { ReactNode } from "react";
 
 interface SectionHeadingProps {
   title: string;
   icon: ReactNode;
   uppercase?: boolean;
+  sx?: SxProps<Theme>;
 }
 
 export const SectionHeading: React.FC<SectionHeadingProps> = ({
   title,
   icon,
   uppercase = true,
+  sx,
 }) => {
   return (
-    <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 3 }}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      spacing={1.5}
+      sx={{ mb: 3, ...sx }}
+    >
       <Avatar
         sx={{
           bgcolor: "background.paper",

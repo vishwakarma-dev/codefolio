@@ -1,4 +1,4 @@
-import "@app/styles/globals.css";
+import "../styles/globals.css";
 
 import AppLayout from "@app/Layout/AppLayout";
 import { AppProviders } from "@app/providers/AppProviders";

@@ -2,8 +2,8 @@ import { SkillCard } from "@app/components/SkillVisualizer";
 import { PageHero } from "@app/components/ui/PageHero";
 import { SectionHeading } from "@app/components/ui/SectionHeading";
 import { PortfolioDataContext } from "@app/providers/PortfolioDataProvider";
-import type { Skill } from "@app/types";
-import { Box, Container, Stack } from "@mui/material";
+import type { Skill } from "../../types";
+import { Box, Chip, Container, Stack, Typography } from "@mui/material";
 import type { SvgIconProps } from "@thesvg/react";
 import Codeberg from "@thesvg/react/codeberg";
 import Dotnet from "@thesvg/react/dotnet";
@@ -33,6 +33,20 @@ const CATEGORY_ICONS: Record<string, IconComponent> = {
   testing: Selenium,
 };
 
+const CATEGORY_ORDER = [
+  "Frontend",
+  "Framework",
+  "Backend",
+  "Database",
+  "AI",
+  "Testing",
+  "Version Control",
+  "Deployment",
+  "IDE",
+  "Tools",
+  "Other",
+];
+
 export const SkillsSection = () => {
   const [isAnimate, setIsAnimate] = useState(false);
   const data = useContext(PortfolioDataContext);
@@ -57,11 +71,13 @@ export const SkillsSection = () => {
   const categoryEntries = (
     Object.entries(groupedSkills) as [string, Skill[]][]
   ).sort(([a], [b]) => {
-    const aIsOther = a.toLowerCase() === "other";
-    const bIsOther = b.toLowerCase() === "other";
-    if (aIsOther && !bIsOther) return 1;
-    if (!aIsOther && bIsOther) return -1;
-    return 0;
+    const aIndex = CATEGORY_ORDER.indexOf(a);
+    const bIndex = CATEGORY_ORDER.indexOf(b);
+
+    if (aIndex === -1 && bIndex === -1) return a.localeCompare(b);
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+    return aIndex - bIndex;
   });
 
   const getCategoryIcon = (category: string) => {
@@ -78,19 +94,34 @@ export const SkillsSection = () => {
         <PageHero
           label="Competency Matrix"
           icon={<ProTools width={16} height={16} aria-hidden="true" />}
-          title="Technical"
-          highlight="Arsenal"
-          description="A curated set of frameworks, platforms, and engineering tools I use to ship scalable products."
-          sx={{ mb: 8 }}
+          title="Full-stack"
+          highlight="Toolkit"
+          description="A practical stack for building responsive interfaces, secure APIs, database-backed systems, automation workflows, and AI-assisted product features."
+          sx={{ mb: { xs: 5, md: 7 } }}
         />
 
-        <Stack spacing={6}>
+        <Stack spacing={{ xs: 5, md: 6 }}>
           {categoryEntries.map(([category, skills]) => (
             <Box key={category}>
-              <SectionHeading
-                title={category}
-                icon={getCategoryIcon(category)}
-              />
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={1.5}
+                alignItems={{ xs: "flex-start", sm: "center" }}
+                justifyContent="space-between"
+                sx={{ mb: 2.5 }}
+              >
+                <SectionHeading
+                  title={category}
+                  icon={getCategoryIcon(category)}
+                  sx={{ mb: 0 }}
+                />
+
+                <Chip
+                  label={`${skills.length} ${skills.length === 1 ? "skill" : "skills"}`}
+                  size="small"
+                  variant="outlined"
+                />
+              </Stack>
 
               <Box
                 sx={{
@@ -101,7 +132,7 @@ export const SkillsSection = () => {
                     md: "repeat(3, minmax(0, 1fr))",
                     lg: "repeat(4, minmax(0, 1fr))",
                   },
-                  gap: 2,
+                  gap: { xs: 1.5, md: 2 },
                 }}
               >
                 {skills.map((skill) => (
@@ -110,6 +141,21 @@ export const SkillsSection = () => {
                   </Box>
                 ))}
               </Box>
+
+              {category.toLowerCase() === "backend" ? (
+                <Typography
+                  variant="body2"
+                  sx={{
+                    mt: 2,
+                    color: "text.secondary",
+                    maxWidth: 760,
+                    lineHeight: 1.7,
+                  }}
+                >
+                  Comfortable connecting UI, APIs, databases, and automation
+                  into maintainable full-stack workflows.
+                </Typography>
+              ) : null}
             </Box>
           ))}
         </Stack>

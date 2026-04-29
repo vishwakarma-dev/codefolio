@@ -10,8 +10,9 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import type React from "react";
-import type { Project } from "../types";
+import type { Project } from "../../types";
 
 export const ProjectCard: React.FC<{
   project: Project;
@@ -26,25 +27,38 @@ export const ProjectCard: React.FC<{
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
-        border: `1px solid ${theme.palette.divider}`,
-        transition: "all 0.3s ease",
+        overflow: "hidden",
+        bgcolor:
+          theme.palette.mode === "dark"
+            ? alpha(theme.palette.background.paper, 0.72)
+            : alpha(theme.palette.background.paper, 0.92),
+        border: `1px solid ${alpha(theme.palette.text.primary, 0.1)}`,
+        boxShadow: "none",
+        transition:
+          "transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease",
         "&:hover": {
-          borderColor: "primary.main",
+          borderColor: alpha(theme.palette.primary.main, 0.45),
           transform: "translateY(-5px)",
           boxShadow:
             theme.palette.mode === "dark"
-              ? "0 18px 36px rgba(0,0,0,0.5)"
-              : "0 18px 36px rgba(99, 102, 241, 0.12)",
-          "& .project-image": { transform: "scale(1.06)" },
+              ? `0 14px 34px ${alpha("#020617", 0.34)}`
+              : `0 14px 34px ${alpha(theme.palette.text.primary, 0.08)}`,
+          "& .project-image": {
+            opacity: theme.palette.mode === "dark" ? 0.84 : 0.78,
+            transform: "scale(1.025)",
+          },
           "& .project-actions-overlay": { opacity: 1 },
           "& .project-actions": {
             opacity: 1,
             transform: "translateY(0)",
           },
+          "& .project-title": {
+            color: "primary.main",
+          },
         },
       }}
     >
-      <Box sx={{ position: "relative", overflow: "hidden", pt: "52%" }}>
+      <Box sx={{ position: "relative", overflow: "hidden", pt: "38%" }}>
         <CardMedia
           className="project-image"
           component="img"
@@ -56,7 +70,20 @@ export const ProjectCard: React.FC<{
             left: 0,
             width: "100%",
             height: "100%",
-            transition: "transform 0.7s ease",
+            objectFit: "cover",
+          }}
+        />
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 1,
+            background:
+              theme.palette.mode === "dark"
+                ? `linear-gradient(180deg, ${alpha(theme.palette.background.paper, 0)} 0%, ${alpha(theme.palette.background.paper, 0.18)} 58%, ${theme.palette.background.paper} 100%)`
+                : `linear-gradient(180deg, ${alpha(theme.palette.background.paper, 0)} 0%, ${alpha(theme.palette.background.paper, 0.28)} 58%, ${theme.palette.background.paper} 100%)`,
+            pointerEvents: "none",
           }}
         />
         <Box
@@ -69,8 +96,8 @@ export const ProjectCard: React.FC<{
             transition: "opacity 0.25s ease",
             background:
               theme.palette.mode === "dark"
-                ? "linear-gradient(180deg, rgba(2,6,23,0.22), rgba(2,6,23,0.58))"
-                : "linear-gradient(180deg, rgba(15,23,42,0.14), rgba(15,23,42,0.4))",
+                ? "rgba(2, 6, 23, 0.58)"
+                : "rgba(15, 23, 42, 0.38)",
             display: "grid",
             placeItems: "center",
             p: 1.5,
@@ -95,9 +122,9 @@ export const ProjectCard: React.FC<{
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              sx={{ px: 1.6, py: 0.45, fontWeight: 800 }}
+              sx={{ px: 1.6, py: 0.45, fontWeight: 800, borderRadius: 1.5 }}
             >
-              Live Preview
+              Preview
             </Button>
             <Button
               size="small"
@@ -112,6 +139,7 @@ export const ProjectCard: React.FC<{
                 px: 1.6,
                 py: 0.45,
                 fontWeight: 800,
+                borderRadius: 1.5,
                 bgcolor: "rgba(255,255,255,0.92)",
                 color: "#0f172a",
                 borderColor: "rgba(255,255,255,0.95)",
@@ -129,19 +157,21 @@ export const ProjectCard: React.FC<{
           sx={{
             fontWeight: 900,
             color: "primary.main",
-            letterSpacing: 1.4,
+            letterSpacing: 1,
             fontSize: "0.65rem",
           }}
         >
           {project.category}
         </Typography>
         <Typography
+          className="project-title"
           variant="h6"
           sx={{
             fontWeight: 900,
             mb: 0.8,
             fontFamily: "Space Grotesk",
-            lineHeight: 1.2,
+            lineHeight: 1.18,
+            transition: "color 180ms ease",
           }}
         >
           {project.title}
@@ -157,6 +187,7 @@ export const ProjectCard: React.FC<{
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
             fontSize: "0.9rem",
+            lineHeight: 1.55,
           }}
         >
           {project.description}
@@ -167,7 +198,13 @@ export const ProjectCard: React.FC<{
               key={tech}
               label={tech}
               size="small"
-              sx={{ fontWeight: 700, bgcolor: "action.hover", height: 24 }}
+              variant="outlined"
+              sx={{
+                height: 24,
+                borderRadius: 1.2,
+                fontWeight: 700,
+                bgcolor: "transparent",
+              }}
             />
           ))}
           {project.techStack.length > 2 && (

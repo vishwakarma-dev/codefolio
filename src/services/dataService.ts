@@ -1,4 +1,4 @@
-import type { Project, Skill } from "@app/types";
+import type { Project, Skill } from "../../types";
 
 export interface PortfolioData {
   USER: {
@@ -27,7 +27,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
   },
 
   SOCIAL_LINKS: {
-    github: "https://github.com/vaibhav-satokar",
+    github: "https://github.com/vishwakarma-dev",
     linkedin: "https://www.linkedin.com/in/vaibhav-satokar/",
     email: "vaibhav.satokar@outlook.com",
     phone: "+91 87667 39475",
